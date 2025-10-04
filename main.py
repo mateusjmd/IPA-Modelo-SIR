@@ -1,5 +1,5 @@
 import streamlit as st
-from Influenza import executar_influenza
+from influenza import executar_influenza
 
 # Título geral
 st.set_page_config(page_title='Modelos Epidemiológicos', initial_sidebar_state='expanded', layout='wide')
