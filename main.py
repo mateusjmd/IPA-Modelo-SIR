@@ -67,32 +67,33 @@ st.markdown(page_bg_style, unsafe_allow_html=True)
 tab1, tab2, tab3 = st.tabs(['Modelos', 'Bio-Matemática', 'Código'])
 
 with tab1:
-    # Executa o modelo da Influenza
+    # Executa o modelo da Influenza spp.
     executar_influenza()
 
 with tab2:
     st.subheader('Parâmetros Chave')
     st.markdown(r"""
-- $N$: população total (pode ser variável se incluirmos natalidade/mortalidade).
+- $N$: População total (pode ser variável se incluirmos natalidade/mortalidade).
 
-- $S, E, I, R$: compartimentos **Susceptível**, **Exposto (latente)**, **Infectado (infectante)**, **Recuperado/imune**.
+- $S, E, I, R$: Compartimentos **Susceptível**, **Exposto (latente)**, **Infectado (infectante)**, **Recuperado/imune**.
 
-- $\beta$: taxa de transmissão (unidade: $1/(\text{indivíduo} \cdot \text{tempo})$, ajustada ao tipo de incidência).  
-  No código, há $\beta(t)$ quando se aplica sazonalidade.
+- $\beta$: Taxa de transmissão (unidade: $\frac{1}{\text{indivíduo} \; \cdot \; \text{tempo}}$, ajustada ao tipo de incidência). 
+           
+    Quando se aplica sazonalidade, interpreta-se em função do tempo: $\beta(t)$
 
-- $\sigma$: taxa de passagem $E \to I$.  
+- $\sigma$: Taxa de passagem $E \to I$.  
   Média do período de latência $= \tfrac{1}{\sigma}$.
 
-- $\gamma$: taxa de recuperação $I \to R$.  
+- $\gamma$: Taxa de recuperação $I \to R$.  
   Média do período de infectiosidade $= \tfrac{1}{\gamma}$.
 
-- $\mu$: taxa natural de mortalidade/natalidade (se incluída).  
+- $\mu$: Taxa natural de mortalidade/natalidade (se incluída).  
   Quando diária, $\mu = \tfrac{1}{\text{esperança de vida em dias}}$.
 
-- $\nu$: taxa de perda de imunidade (*waning*).  
+- $\nu$: Taxa de perda de imunidade (Re-susceptibilidade).  
   Média do tempo imune $= \tfrac{1}{\nu}$.
 
-- $v \;$ & $\; e$: taxa de vacinação diária e eficácia.  
+- $v \;$ & $\; e$: Taxa de vacinação diária e eficácia.  
   Frequentemente modeladas como fluxo $veS$ de $S \to R$.
                 """)
 
@@ -159,7 +160,7 @@ import plotly.express as px
 
 def executar_influenza():
     '''
-    Simulação ajustável para Influenza baseada em SIR/SEIR/SEIRS com:
+    Simulação ajustável para Influenza spp. baseada em SIR/SEIR/SEIRS com:
       - Período latente (E) (SEIR)
       - Re-susceptibilidade (S <- R) (SEIRS)
       - Vacinação (fluxo S -> R)
@@ -167,7 +168,7 @@ def executar_influenza():
       - Sazonalidade em β: beta(t) = beta0 * (1 + alpha * cos(2π(t - phi)/365))
     '''
 
-    st.header("Simulação - Modelo Influenza (SIR/SEIR/SEIRS)")
+    st.header("Simulação - *Influenza spp.*")
 
     modelo = st.selectbox("Tipo de modelo", options=["SIR", "SEIR", "SEIRS (Re-susceptibilidade)"])
 
@@ -190,7 +191,7 @@ def executar_influenza():
         sigma = st.slider("Taxa de progressão $E->I (σ)$ (1/latência dias)", 0.0, 1.0, 1/1.5, 0.01)  # latência ~1-2 dias
         gamma = st.slider(r"Taxa de recuperação ($\gamma$) (1/dias infecc.)", 0.0, 1.0, 1/3.0, 0.01)  # recuperação ~3 dias
         mu = st.slider("Taxa mortalidade/natalidade natural (μ) anual -> convert. diária", 0.0, 0.05, 1/(70*365), 1e-6)
-        # nota: mu fornecido já em taxa diária (usuário pode ajustar), default ~1/(70*365)
+        # Nota: mu fornecido em taxa diária (usuário pode ajustar) -> Padrão: ~1/(70*365)
 
         # Re-susceptibilidade
         waning_days = st.number_input("Dias médios até perda de imunidade (0 = permanente)", 0, 3650, 365)
@@ -348,4 +349,3 @@ def executar_influenza():
     else:
         st.write(r"\gamma = 0, não é possível estimar $R_0$.")
             """, language='python')
-
