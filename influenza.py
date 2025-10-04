@@ -6,7 +6,7 @@ import plotly.express as px
 
 def executar_influenza():
     """
-    Simulação ajustável para Influenza baseada em SIR/SEIR/SEIRS com:
+    Simulação ajustável para Influenza spp. baseada em SIR/SEIR/SEIRS com:
       - Período latente (E) (SEIR)
       - Re-susceptibilidade (S <- R) (SEIRS)
       - Vacinação (fluxo S -> R)
@@ -14,7 +14,7 @@ def executar_influenza():
       - Sazonalidade em β: beta(t) = beta0 * (1 + alpha * cos(2π(t - phi)/365))
     """
 
-    st.header("Simulação - Modelo Influenza (SIR/SEIR/SEIRS)")
+    st.header("Simulação - *Influenza spp.*")
 
     modelo = st.selectbox("Tipo de modelo", options=["SIR", "SEIR", "SEIRS (Re-susceptibilidade)"])
 
@@ -37,7 +37,7 @@ def executar_influenza():
         sigma = st.slider("Taxa de progressão $E->I (σ)$ (1/latência dias)", 0.0, 1.0, 1/1.5, 0.01)  # latência ~1-2 dias
         gamma = st.slider(r"Taxa de recuperação ($\gamma$) (1/dias infecc.)", 0.0, 1.0, 1/3.0, 0.01)  # recuperação ~3 dias
         mu = st.slider("Taxa mortalidade/natalidade natural (μ) anual -> convert. diária", 0.0, 0.05, 1/(70*365), 1e-6)
-        # nota: mu fornecido já em taxa diária (usuário pode ajustar), default ~1/(70*365)
+        # Nota: mu fornecido em taxa diária (usuário pode ajustar) -> Padrão: ~1/(70*365)
 
         # Re-susceptibilidade
         waning_days = st.number_input("Dias médios até perda de imunidade (0 = permanente)", 0, 3650, 365)
